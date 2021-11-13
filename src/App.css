@@ -63,3 +63,10 @@
   text-align: end;
   align-items: flex-end;
 }
+.task-overflow{
+  white-space: wrap; 
+  width: 500px; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
+}

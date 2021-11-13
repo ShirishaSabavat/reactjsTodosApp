@@ -7,8 +7,8 @@ function App() {
   const [task, setTask] = useState("")
   const [todos, setTodos] = useState([])
   const [id, setId] = useState(0);
-  const [done, setDone] =useState(false)
-
+  const [done, setDone] = useState(false)
+  
   const onChangeEventHandler = e => {
     setTask(e.target.value)
   }
@@ -29,8 +29,8 @@ function App() {
 
   const checkAndStrike = (todoId) => {
     let updatedTodos = todos.map((todoObj) => {
-      if ( todoObj.id === todoId ){
-       setDone(todoObj.done=!todoObj.done)
+      if (todoObj.id === todoId) {
+        setDone(todoObj.done = !todoObj.done)
       }
       return todoObj;
     });
@@ -47,11 +47,11 @@ function App() {
             <input style={{ fontSize: "12px", height: "30px" }} className="btn btn-info text-white mt-2" type="submit" value="Add Todo" name="Add" />
           </form>
           <div class="container">
-          <div className="row">
-          <TodosList todosList={todos} onDeleteHandler={onDeleteEventHandler} checkAndStrike={checkAndStrike} />
+            <div className="row">
+              <TodosList todosList={todos} onDeleteHandler={onDeleteEventHandler} checkAndStrike={checkAndStrike} />
+            </div>
           </div>
-          </div>
-          </div>
+        </div>
       </center>
     </div>
   );
