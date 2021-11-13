@@ -36,3 +36,30 @@
     transform: rotate(360deg);
   }
 }
+
+.todos-overflow {
+  width: 400px;
+  height: 630px;
+  overflow-y: auto;
+}
+.complete{
+  text-decoration: line-through;
+  opacity: 0.4;
+}
+.todo-items {
+  width: 380px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-self: flex-start;
+}
+.todo-checkbox-item{
+  align-items: flex-start;
+}
+.todo-task-name-item{
+  align-items: flex-start;
+}
+.todo-delete-item{
+  text-align: end;
+  align-items: flex-end;
+}
