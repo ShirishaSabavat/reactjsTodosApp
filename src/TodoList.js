@@ -11,7 +11,6 @@ const TodosList = ({ todosList, onDeleteHandler, checkAndStrike }) => {
     const onClickTodoView = (todo) => {
         setTask(todo.task)
         setCenteredModal(!centeredModal)
-        console.log(todo.id);
     }
 
     return (

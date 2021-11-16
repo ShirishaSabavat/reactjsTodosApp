@@ -8,24 +8,31 @@ function App() {
   const [todos, setTodos] = useState([])
   const [id, setId] = useState(0);
   const [done, setDone] = useState(false)
-  
+  const [lengthOfTodos, setLengthOfTodos] = useState(0)
+
   const onChangeEventHandler = e => {
     setTask(e.target.value)
   }
 
   const onSubmitEventHandler = e => {
     e.preventDefault();
-    const newTodos = [...todos, { id: id, task: task, done: done }];
+    setDone(false)
+    setTodos(prevState => prevState.map((todo, index)=> todo.id = index+1))
+    const newTodos = [{ task: task, done: done }, ...todos];
     setTodos(newTodos);
-    console.log(newTodos)
-    setId(id + 1);
     setTask("");
   }
 
   const onDeleteEventHandler = (indexValue) => {
-    const newTodos = todos.filter((todo, index) => index !== indexValue);
-    setTodos(newTodos);
-  }
+    const newTodos = todos.filter((todo, index) => {if (index !== indexValue){
+      setDone(false)
+      return todo;
+    }else{
+      return "";
+    }})
+    setTodos(newTodos)
+    console.log(todos)
+    }
 
   const checkAndStrike = (todoId) => {
     let updatedTodos = todos.map((todoObj) => {
@@ -35,7 +42,6 @@ function App() {
       return todoObj;
     });
     setTodos(updatedTodos);
-    console.log(todos)
   }
   return (
     <div className="App">
@@ -46,7 +52,7 @@ function App() {
             <input required className="form-control form-control-sm w-50 mt-2" type="text" name="task" value={task} placeholder="Write here..." onChange={onChangeEventHandler} /> &nbsp;&nbsp;
             <input style={{ fontSize: "12px", height: "30px" }} className="btn btn-info text-white mt-2" type="submit" value="Add Todo" name="Add" />
           </form>
-          <div class="container">
+          <div className="container">
             <div className="row">
               <TodosList todosList={todos} onDeleteHandler={onDeleteEventHandler} checkAndStrike={checkAndStrike} />
             </div>
