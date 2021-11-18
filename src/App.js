@@ -1,47 +1,68 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import TodosList from "./TodoList";
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function App() {
+const App = () => {
   const [task, setTask] = useState("")
   const [todos, setTodos] = useState([])
-  const [id, setId] = useState(0);
-  const [done, setDone] = useState(false)
-  const [lengthOfTodos, setLengthOfTodos] = useState(0)
+  const [editTodo, setEditTodo] = useState(null)
 
   const onChangeEventHandler = e => {
     setTask(e.target.value)
   }
 
+  const updateTodo=(task, id, done) =>{
+    const newTodo=todos.map((todo)=>(todo.id === id) ? {task, id, done} : todo);
+    setTodos(newTodo);
+    setEditTodo("")
+  };
+  useEffect(()=>{
+    if (editTodo){
+      setTask(editTodo.task);
+    }else{
+      setTask("")
+    }
+  }, [setTask, editTodo])
+
   const onSubmitEventHandler = e => {
     e.preventDefault();
-    setDone(false)
-    setTodos(prevState => prevState.map((todo, index)=> todo.id = index+1))
-    const newTodos = [{ task: task, done: done }, ...todos];
-    setTodos(newTodos);
-    setTask("");
+    if (!editTodo){
+      setTodos(prevState => prevState.map((todo, index) => todo.id = index + 1))
+      setTodos([{ task: task, done: false }, ...todos]);
+      setTask("");
+    }else{
+      updateTodo(task, editTodo.id, editTodo.done);
+    }
   }
 
   const onDeleteEventHandler = (indexValue) => {
-    const newTodos = todos.filter((todo, index) => {if (index !== indexValue){
-      setDone(false)
-      return todo;
-    }else{
-      return "";
-    }})
+    const newTodos = todos.filter((todo, index) => {
+      if (index !== indexValue) {
+        return todo;
+      } else {
+        return "";
+      }
+    })
     setTodos(newTodos)
     console.log(todos)
-    }
+  }
 
-  const checkAndStrike = (todoId) => {
-    let updatedTodos = todos.map((todoObj) => {
-      if (todoObj.id === todoId) {
-        setDone(todoObj.done = !todoObj.done)
-      }
-      return todoObj;
-    });
-    setTodos(updatedTodos);
+  const onEditHandler = (id) => {
+    const findTodo = todos.find( (todo) => todo.id === id);
+    setEditTodo(findTodo);
+  }
+
+  const checkAndStrike = (todo) => {
+    setTodos(
+      todos.map((item) => {
+        if (item.id === todo.id) {
+          return { ...item, done: !item.done };
+        } else {
+          return item;
+        }
+      })
+    );
   }
   return (
     <div className="App">
@@ -50,11 +71,13 @@ function App() {
           <h5 className="text-info">Todo-List Application</h5>
           <form className="d-flex flex-row justify-content-center mb-5 mt-3" onSubmit={onSubmitEventHandler} >
             <input required className="form-control form-control-sm w-50 mt-2" type="text" name="task" value={task} placeholder="Write here..." onChange={onChangeEventHandler} /> &nbsp;&nbsp;
-            <input style={{ fontSize: "12px", height: "30px" }} className="btn btn-info text-white mt-2" type="submit" value="Add Todo" name="Add" />
+            <button style={{ fontSize: "12px", height: "30px" }} className="btn btn-info text-white mt-2" type="submit" name="Add" >
+              {editTodo ? "OK" : "Add"}
+            </button>
           </form>
           <div className="container">
             <div className="row">
-              <TodosList todosList={todos} onDeleteHandler={onDeleteEventHandler} checkAndStrike={checkAndStrike} />
+              <TodosList todosList={todos} onDeleteHandler={onDeleteEventHandler} checkAndStrike={checkAndStrike} onEditHandler={onEditHandler} />
             </div>
           </div>
         </div>
